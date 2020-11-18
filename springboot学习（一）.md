@@ -132,7 +132,7 @@
 						        SpringApplication.run(HelloWorldMainApplication.class,args);
 						    }
 						}
-					@SpringBootApplication：Spring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；
+					@SpringBootApplication：Spring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；打开@SpringBootApplication：
 						@Target({ElementType.TYPE})
 						@Retention(RetentionPolicy.RUNTIME)
 						@Documented
@@ -151,8 +151,22 @@
 						public @interface SpringBootApplication {
 					@SpringBootConfiguration：SpringBoot的配置类；
 						标注在某个类上，表示这是一个Spring Boot的配置类；
-​						@Configuration:配置类上来标注这个注解；
-​							配置类=配置文件；配置类也是容器中的一个组件；@Component
+							配置类=配置文件；配置类也是容器中的一个组件；@Component
+					@EnableAutoConfiguration：开启自动配置功能；
+						以前我们需要配置的东西，Spring Boot帮我们自动配置；@EnableAutoConfiguration告诉SpringBoot开启自动配置功能；这样自动配置才能生效；
+					点进入@EnableAutoConfiguration：
+					@AutoConfigurationPackage
+					@Import({AutoConfigurationImportSelector.class})
+					public @interface EnableAutoConfiguration {
+						@AutoConfigurationPackage：自动配置包
+						点进@AutoConfigurationPackage:
+						@Import({Registrar.class}):给容器导入组件；导入的组件由Registrar.class
+							将主配置类（@SpringBootApplication）的所在包及下面所有子包里面的所有组件扫描到Spring容器；
+
+
+​						
+​							
+
 
 
 
