@@ -46,7 +46,7 @@
 	修改User setting file 和local repository
 
 #### Spring Boot入门
--1.Springboot helloworld：浏览器发送hello请求，服务器接受请求并处理，响应hello world字符串
+- 1.Springboot helloworld：浏览器发送hello请求，服务器接受请求并处理，响应hello world字符串
 	- 创建一个maven工程
 	- 导入springboot相关依赖
 	- 导入springboot依赖
