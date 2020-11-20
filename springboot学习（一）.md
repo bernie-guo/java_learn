@@ -180,6 +180,7 @@
 						@Import({Registrar.class}):Spring底层注解；给容器导入组件；导入的组件由Registrar.class
 							将主配置类（@SpringBootApplication）的所在包及下面所有子包里面的所有组件扫描到Spring容器；
 				```
+			
 
 ​						
 ​							
