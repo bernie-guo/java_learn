@@ -26,7 +26,7 @@
 	– IntelliJ IDEA 2017
 	- Spring Boot 1.5.9.RELEASE
 - 5.MAVEN设置；给maven 的settings.xml配置文件的profiles标签添加
-```
+```xml
 <profile>
   <id>jdk-11</id>
   <activation>
@@ -50,7 +50,7 @@
 	- 创建一个maven工程
 	- 导入springboot相关依赖
 	- 导入springboot依赖
-	```
+	```xml
 				<parent>
 			        <artifactId>spring-boot-starter-parent</artifactId>
 			        <groupId>org.springframework.boot</groupId>
@@ -65,7 +65,7 @@
 			    </dependencies>
 	```
 	- 编写一个主程序；启动Springboot应用
-	```
+	```java
 				@SpringBootApplication
 				/**
 				 * @SpringBootApplication 来标注一个主程序类，说明是一个SpringBoot应用
@@ -78,7 +78,7 @@
 				}
 	```
 	- 编写相关的Controller Service
-	```
+	```java
 				@Controller
 				public class HelloController {
 				    @ResponseBody
@@ -91,7 +91,7 @@
 	- 运行主程序直接测试
 	- 简化部署
 		- 1 在pom导入插件
-		```
+		```xml
 					<!--这个插件，可以将应用打包成一个可执行的jar包-->
 				    <build>
 				        <plugins>
@@ -106,8 +106,9 @@
 		- 2 点击从右侧的maven->package打成jar包，直接使用java -jar 命令
 	- Hello World探究
 		- 1 pom文件
+			
 			* 1 父项目
-			```
+			```xml
 						<parent>
 					        <artifactId>spring-boot-starter-parent</artifactId>
 					        <groupId>org.springframework.boot</groupId>
@@ -123,18 +124,18 @@
 				他来真正管理Springboot应用里边的所以依赖
 				Spring Boot的版本仲裁中心；以后我们导入依赖默认是不需要写版本；（没有在dependencies里面管理的依赖自然需要声明版本号）
 			* 2 启动器
-			```
+			```xml
 						<dependency>
 				            <groupId>org.springframework.boot</groupId>
 				            <artifactId>spring-boot-starter-web</artifactId>
 				            <version>2.3.5.RELEASE</version>
 				        </dependency>
-			```
-				        `spring-boot-starter-web`：
-				        	`spring-boot-starter`：Springboot的场景启动器；帮我们导入了web模块相关的依赖的组件；
-				        SpringBoot将所有的功能场景都抽取出来，做成一个个的starters（启动器），只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来。要用什么功能就导入什么场景的启动器
+      ```
+        `spring-boot-starter-web`：
+        	`spring-boot-starter`：Springboot的场景启动器；帮我们导入了web模块相关的依赖的组件；
+		    SpringBoot将所有的功能场景都抽取出来，做成一个个的starters（启动器），只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来。要用什么功能就导入什么场景的启动器
 		- 2 主程序类
-		```
+		``` java
 						@SpringBootApplication
 						/**
 						 * @SpringBootApplication 来标注一个主程序类，说明是一个SpringBoot应用
@@ -146,8 +147,10 @@
 						    }
 						}
 		```
-			`@SpringBootApplication`：Spring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；打开@SpringBootApplication：
-			```
+		
+		@SpringBootApplicatiSpring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；打开@SpringBootApplication：
+			
+	```java
 						@Target({ElementType.TYPE})
 						@Retention(RetentionPolicy.RUNTIME)
 						@Documented
@@ -164,25 +167,37 @@
 						)}
 						)
 						public @interface SpringBootApplication {
-			```
-			`@SpringBootConfiguration`：SpringBoot的配置类；
-				标注在某个类上，表示这是一个Spring Boot的配置类；
-				配置类=配置文件；配置类也是容器中的一个组件；@Component
-			`@EnableAutoConfiguration`：开启自动配置功能；
-				以前我们需要配置的东西，Spring Boot帮我们自动配置；`@EnableAutoConfiguration告诉SpringBoot`开启自动配置功能；这样自动配置才能生效；
-				点进入`@EnableAutoConfiguration`：
-				```
+	```
+	@SpringBootConfiguration：SpringBoot的配置类；
+	标注在某个类上，表示这是一个Spring Boot的配置类；
+		配置类=配置文件；配置类也是容器中的一个组件；@Component
+	@EnableAutoConfiguration：开启自动配置功能；
+	以前我们需要配置的东西，Spring Boot帮我们自动配置；`@EnableAutoConfiguration告诉SpringBoot开启自动配置功能；这样自动配置才能生效；
+		点进入@EnableAutoConfiguration：
+		
+```java
 					@AutoConfigurationPackage
 					@Import({AutoConfigurationImportSelector.class})
 					public @interface EnableAutoConfiguration {
-						@AutoConfigurationPackage：自动配置包
-						点进@AutoConfigurationPackage:
-						@Import({Registrar.class}):Spring底层注解；给容器导入组件；导入的组件由Registrar.class
-							将主配置类（@SpringBootApplication）的所在包及下面所有子包里面的所有组件扫描到Spring容器；
-				```
-			
+```
+	@AutoConfigurationPackage：自动配置包
+	点进@AutoConfigurationPackage:
+	@Import({Registrar.class}):Spring底层注解；给容器导入组件；导入的组件由Registrar.class
+		将主配置类（@SpringBootApplication）的所在包及下面所有子包里面的所有组件扫描到Spring容器；
+	@Import({AutoConfigurationImportSelector.class})：给哪些容器导入组件
+		AutoConfigurationImportSelector：导入哪些组件的选择器
+		将所有需要导入的组件以全类名的方式返回；这些组件就会被添加到容器中；
+		会给容器中导入非常多的自动配置类；就是给容器中导入这个场景组要的所有组件，并配置好这些组件；有了自动配置类免去了手动编写配置注入功能组件等工作；
+		SpringFactoriesLoader.loadFactoryNames(EnableAutoConfiguration.class,classLoader)；
+		从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作；
+		J2EE的整体整合解决方案和自动配置都在spring-boot-autoconfigure-1.5.9.RELEASE.jar；
 
-​						
+- 2.使用SpringInitializer快速创建Spring Boot项目
+  IDE都支持使用Spring的项目创建向导快速创建一个Spring Boot项目；
+  选择我们需要的模块；向导会联网创建SpringBoot项目；
+  - 
+
+
 ​							
 
 
